@@ -1,40 +1,40 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type UserDTO struct {
-	ID       int
-	Username string
-	Email    string
-}
-
-func getUserFromDatabase(userID int) UserDTO {
-	// 通常はデータベースからユーザーデータを取得するロジックがここに入る
-	// 仮のデータで代用
-	return UserDTO{
-		ID:       userID,
-		Username: "sampleuser",
-		Email:    "sampleuser@example.com",
-	}
-}
-
-// アプリケーションの別の層にユーザーデータを渡す関数
-func processUser(user UserDTO) {
-	// ユーザーデータを処理するロジックがここに入る
-	fmt.Printf("Processing user: ID=%d, Username=%s, Email=%s\n", user.ID, user.Username, user.Email)
+	ID       int    `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
 }
 
 func main() {
 
-	userID := 1
-	userFromDB := getUserFromDatabase(userID)
+	user := UserDTO{
+		ID:       1,
+		Username: "sampleuser",
+		Email:    "sampleuser@example.com",
+	}
 
-	//Processing user: ID=1, Username=sampleuser, Email=sampleuser@example.com
-	processUser(userFromDB)
+	// マーシャリング（構造体をJSONに変換）
+	jsonData, err := json.Marshal(user)
+	if err != nil {
+		fmt.Println("JSON Marshal error:", err)
+		return
+	}
 
-	userID = 2
-	userFromDB = getUserFromDatabase(userID)
+	fmt.Println("JSON Data:", string(jsonData))
 
-	//Processing user: ID=2, Username=sampleuser, Email=sampleuser@example.com
-	processUser(userFromDB)
+	// アンマーシャリング（JSONを構造体に変換）
+	var newUser UserDTO
+	err = json.Unmarshal(jsonData, &newUser)
+	if err != nil {
+		fmt.Println("JSON Unmarshal error:", err)
+		return
+	}
+
+	fmt.Printf("Unmarshalled User: %+v\n", newUser)
 }
