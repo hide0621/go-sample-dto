@@ -29,5 +29,12 @@ func main() {
 	userID := 1
 	userFromDB := getUserFromDatabase(userID)
 
+	//Processing user: ID=1, Username=sampleuser, Email=sampleuser@example.com
+	processUser(userFromDB)
+
+	userID = 2
+	userFromDB = getUserFromDatabase(userID)
+
+	//Processing user: ID=2, Username=sampleuser, Email=sampleuser@example.com
 	processUser(userFromDB)
 }
